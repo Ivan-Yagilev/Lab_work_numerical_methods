@@ -120,14 +120,12 @@ class Rk:
             
             # Вычисление y, z, x с постоянным шагом
             self._push(self._x, self._y, self._z)
-
             self._y, self._z = rk(self._y, self._z, self._x, self._h, fy, fz)
             self._x += self._h
 
         self._push(self._x, self._y, self._z)
 
-    @staticmethod
-    def _rk2(y, z, x, h, fy, fz):
+    def _rk2(self, y, z, x, h, fy, fz):
         try:
             k1_y = fy(x, y, z)
             k1_z = fz(x, y, z)
@@ -138,9 +136,8 @@ class Rk:
             res_y = y + 0.5 * h * (k1_y + k2_y)
             res_z = z + 0.5 * h * (k1_z + k2_z)
         except ZeroDivisionError:
-            res_y = y
-            res_z = z
-
+            res_y, res_z = self._rk2(y, z, self.EPS, h, fy, fz)
+    
         return res_y, res_z
 
     def rk2_const(self, fy, fz):
@@ -172,8 +169,7 @@ class Rk:
 
         self._out()
 
-    @staticmethod
-    def _rk3(y, z, x, h, fy, fz):
+    def _rk3(self, y, z, x, h, fy, fz):
         try:
             k1_y = fy(x, y, z)
             k1_z = fz(x, y, z)
@@ -187,8 +183,7 @@ class Rk:
             res_y = y + 1/6 * h * (k1_y + 4 * k2_y + k3_y)
             res_z = z + 1/6 * h * (k1_z + 4 * k2_z + k3_z)
         except ZeroDivisionError:
-            res_y = y
-            res_z = z
+            res_y, res_z = self._rk3(y, z, self.EPS, h, fy, fz)
 
         return res_y, res_z
 
@@ -222,8 +217,7 @@ class Rk:
 
         self._out()
 
-    @staticmethod
-    def _rk4(y, z, x, h, fy, fz):
+    def _rk4(self, y, z, x, h, fy, fz):
         try:
             k1_y = fy(x, y, z)
             k1_z = fz(x, y, z)
@@ -240,8 +234,7 @@ class Rk:
             res_y = y + 1/6 * h * (k1_y + 2 * k2_y + 2 * k3_y + k4_y)
             res_z = z + 1/6 * h * (k1_z + 2 * k2_z + 2 * k3_z + k4_z)
         except ZeroDivisionError:
-            res_y = y
-            res_z = z
+            res_y, res_z = self._rk4(y, z, self.EPS, h, fy, fz)
 
         return res_y, res_z
 
