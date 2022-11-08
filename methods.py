@@ -1,4 +1,6 @@
 import math
+import json
+
 
 # Тестовая задача
 def test_fy(x, y, z):
@@ -282,6 +284,14 @@ class Rk:
         print(f"Число удвоений шага = {self._doubl_numb}")
         print(f"Максимальный шаг = {self._max_h}")
         print(f"Минимальный шаг = {self._min_h}")
+
+        data = {'lst_x': self.lst_x, 'lst_y': self.lst_y, 'lst_z': self.lst_z, 
+        'b': b, 'max_LEE': max(self._local_err), 'max_h': self._max_h, 'min_h': self._min_h, 
+        'div_numb': self._div_numb, 'doubl_numb': self._doubl_numb}
+
+        with open('output_data.json', 'w') as f:
+            f.write(json.dumps(data))
+
 
     def _butch_scheme(self, method):
         print(f"Butcher scheme for: {method}")

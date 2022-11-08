@@ -1,4 +1,3 @@
-import json
 import methods
 import numpy as np
 from scipy.integrate import odeint
@@ -26,7 +25,7 @@ elif choice == 1:
     pass
 else:
     with open("2_input_data.json") as input_f:
-        d = json.load(input_f)
+        d = methods.json.load(input_f)
 
     x0 = d['x0']
     y0 = d['y0']
@@ -40,15 +39,15 @@ else:
     s = odeint(F, s0, x)
     plt.plot(x, s[:, 0], 'r--', label='y(x)')
     plt.plot(x, s[:, 1], 'r--', label='z(x)')
-    
+
     rk = methods.Rk(x0, y0, z0, h, x_fin)
 
-# rk.rk4_err_control(methods.test_fy, methods.test_fz)
-# y_rk2, z_rk2 = rk.lst_y, rk.lst_z
-# x = rk.lst_x
+    rk.rk4_err_control(methods.fy2, methods.fz2)
+    y_rk2, z_rk2 = rk.lst_y, rk.lst_z
+    x = rk.lst_x
 
-# plt.plot(x, y_rk2, 'k-v', label = 'y(x) rk2')
-# plt.plot(x, z_rk2, 'k-v', label = 'z(x) rk2')
+    plt.plot(x, y_rk2, 'k-v', label = 'y(x) rk2')
+    plt.plot(x, z_rk2, 'k-v', label = 'z(x) rk2')
 
 plt.legend(loc='upper left')
 plt.grid()
