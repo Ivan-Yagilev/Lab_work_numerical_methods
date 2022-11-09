@@ -285,7 +285,6 @@ class Rk:
         with open('output_data.json', 'w') as f:
             f.write(json.dumps(data))
 
-
     def _butch_scheme(self, method):
         print(f"Butcher scheme for: {method}")
         if method == 'rk2':

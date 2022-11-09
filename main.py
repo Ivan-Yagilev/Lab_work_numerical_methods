@@ -4,6 +4,9 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 
 
+def F_test(x):
+    return methods.math.exp(0.58*x)
+
 def F_eq(s, x):
     try:
         dzdx = methods.fz1(x, s[0], s[1])
@@ -33,7 +36,54 @@ choice = input('''
 ''')
 
 if choice == '0':
-    pass
+    with open("test_input_data.json") as input_f:
+        d = methods.json.load(input_f)
+
+    x0 = d['x0']
+    y0 = d['y0']
+    z0 = d['z0']
+    h = d['h']
+    x_fin = d['x_fin']
+
+    x = [i/100 for i in range(x0*100, x_fin*100 + 1, int(h*100))]
+    y = [F_test(i) for i in x]
+    plt.plot(x, y, 'r--', label='y(x)')
+
+    rk = methods.Rk(x0, y0, z0, h, x_fin)
+    method = input('''
+    Введите последовательность цифер для отображения методов:
+    1. Рунге-Кутта 2 порядка с постоянным шагом
+    2. Рунге-Кутта 2 порядка с переменным шагом
+    3. Рунге-Кутта 3 порядка с постоянным шагом
+    4. Рунге-Кутта 3 порядка с переменным шагом
+    5. Рунге-Кутта 4 порядка с постоянным шагом
+    6. Рунге-Кутта 4 порядка с переменным шагом
+    ''')
+
+    if '1' in method:
+        rk.rk2_const(methods.test_fy, methods.test_fz)
+        x, y, z = get_lsts()
+        plt.plot(x, y, 'k-v', label = 'y(x) rk2')
+    if '2' in method:
+        rk.rk2_err_control(methods.test_fy, methods.test_fz)
+        x, y, z = get_lsts()
+        plt.plot(x, y, 'b-4', label = 'y(x) rk2 err')
+    if '3' in method:
+        rk.rk3_const(methods.test_fy, methods.test_fz)
+        x, y, z = get_lsts()
+        plt.plot(x, y, 'y-x', label = 'y(x) rk3')
+    if '4' in method:
+        rk.rk3_err_control(methods.test_fy, methods.test_fz)
+        x, y, z = get_lsts()
+        plt.plot(x, y, 'g-s', label = 'y(x) rk3 err')
+    if '5' in method:
+        rk.rk4_const(methods.test_fy, methods.test_fz)
+        x, y, z = get_lsts()
+        plt.plot(x, y, 'r-3', label = 'y(x) rk4')
+    if '6' in method:
+        rk.rk4_err_control(methods.test_fy, methods.test_fz)
+        x, y, z = get_lsts()
+        plt.plot(x, y, 'm-p', label = 'y(x) rk4 err')
 elif choice == '1':
     with open("1_input_data.json") as input_f:
         d = methods.json.load(input_f)
