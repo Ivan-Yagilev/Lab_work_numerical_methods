@@ -18,14 +18,14 @@ def fz1(x, y, z):
 
 # 2-ая задача
 def fy2(x, y, z):
-    return y * z + math.cos(abs(x) / x)
+    return y * z + math.cos(x) / x
 
 def fz2(x, y, z):
     return - z ** 2 + 2.5/(1 + x ** 2)
 
 
 class Rk:
-    EPS = 0.0000001
+    EPS = 0.00001
     ITERATION = 5000
 
     def __init__(self, x0, y0, z0, h, x_fin):
@@ -86,26 +86,34 @@ class Rk:
         self._z_lst.append(z)
 
     def _local_err_control(self, S_y, S_z, p, x3, y3, z3):
-        if abs(S_y) > Rk.EPS or abs(S_z) > Rk.EPS:
-            self._h *= 0.5
-            self._div_numb += 1
+        if self._h < Rk.EPS:
+            self._x = x3
+            self._y = y3
+            self._z = z3
+            self._push(self._x, self._y, self._z)
             self._min_h = self._h if self._min_h > self._h else self._min_h
-        else:
-            if abs(S_y) < (Rk.EPS / 2 ** (p + 1)):
-                self._x = x3
-                self._y = y3
-                self._z = z3
-                self._h *= 2
+            self._h = Rk.EPS
+        else:    
+            if abs(S_y) > Rk.EPS or abs(S_z) > Rk.EPS:
+                self._h *= 0.5
+                self._div_numb += 1
+                self._min_h = self._h if self._min_h > self._h else self._min_h
+            else:
+                if abs(S_y) < (Rk.EPS / 2 ** (p + 1)):
+                    self._x = x3
+                    self._y = y3
+                    self._z = z3
+                    self._h *= 2
 
-                self._push(self._x, self._y, self._z)
+                    self._push(self._x, self._y, self._z)
 
-                self._doubl_numb += 1
-                self._max_h = self._h if self._max_h < self._h else self._max_h
-            elif (Rk.EPS / 2 ** (p + 1)) <= abs(S_y) <= Rk.EPS:
-                self._x = x3
-                self._y = y3
-                self._z = z3
-                self._push(self._x, self._y, self._z)
+                    self._doubl_numb += 1
+                    self._max_h = self._h if self._max_h < self._h else self._max_h
+                elif (Rk.EPS / 2 ** (p + 1)) <= abs(S_y) <= Rk.EPS:
+                    self._x = x3
+                    self._y = y3
+                    self._z = z3
+                    self._push(self._x, self._y, self._z)
 
     def _rk_const(self, fy, fz, rk):
         n = int((self._x_fin - self._x)/self._h)

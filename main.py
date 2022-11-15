@@ -12,7 +12,7 @@ def F_eq(s, x):
         dzdx = methods.fz1(x, s[0], s[1])
         dydx = methods.fy1(x, s[0], s[1])
     except ZeroDivisionError:
-        dydx = s[0]
+        dydx = 0.001
     return [dydx, dzdx]
 
 def F_sys(s, x):
@@ -63,27 +63,27 @@ if choice == '0':
     if '1' in method:
         rk.rk2_const(methods.test_fy, methods.test_fz)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'k-v', label = 'y(x) rk2')
+        plt.plot(x, y, 'k-', label = 'y(x) rk2')
     if '2' in method:
         rk.rk2_err_control(methods.test_fy, methods.test_fz)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'b-4', label = 'y(x) rk2 err')
+        plt.plot(x, y, 'b-', label = 'y(x) rk2 err')
     if '3' in method:
         rk.rk3_const(methods.test_fy, methods.test_fz)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'y-x', label = 'y(x) rk3')
+        plt.plot(x, y, 'y-', label = 'y(x) rk3')
     if '4' in method:
         rk.rk3_err_control(methods.test_fy, methods.test_fz)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'g-s', label = 'y(x) rk3 err')
+        plt.plot(x, y, 'g-', label = 'y(x) rk3 err')
     if '5' in method:
         rk.rk4_const(methods.test_fy, methods.test_fz)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'r-3', label = 'y(x) rk4')
+        plt.plot(x, y, 'r-', label = 'y(x) rk4')
     if '6' in method:
         rk.rk4_err_control(methods.test_fy, methods.test_fz)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'm-p', label = 'y(x) rk4 err')
+        plt.plot(x, y, 'm-', label = 'y(x) rk4 err')
 elif choice == '1':
     with open("1_input_data.json") as input_f:
         d = methods.json.load(input_f)
@@ -114,27 +114,27 @@ elif choice == '1':
     if '1' in method:
         rk.rk2_const(methods.fy1, methods.fz1)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'k-v', label = 'y(x) rk2')
+        plt.plot(x, y, 'k-', label = 'y(x) rk2')
     if '2' in method:
         rk.rk2_err_control(methods.fy1, methods.fz1)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'b-4', label = 'y(x) rk2 err')
+        plt.plot(x, y, 'b-', label = 'y(x) rk2 err')
     if '3' in method:
         rk.rk3_const(methods.fy1, methods.fz1)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'y-x', label = 'y(x) rk3')
+        plt.plot(x, y, 'y-', label = 'y(x) rk3')
     if '4' in method:
         rk.rk3_err_control(methods.fy1, methods.fz1)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'g-s', label = 'y(x) rk3 err')
+        plt.plot(x, y, 'g-', label = 'y(x) rk3 err')
     if '5' in method:
         rk.rk4_const(methods.fy1, methods.fz1)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'r-3', label = 'y(x) rk4')
+        plt.plot(x, y, 'r-', label = 'y(x) rk4')
     if '6' in method:
         rk.rk4_err_control(methods.fy1, methods.fz1)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'm-p', label = 'y(x) rk4 err')
+        plt.plot(x, y, 'm-', label = 'y(x) rk4 err')
 else:
     with open("2_input_data.json") as input_f:
         d = methods.json.load(input_f)
@@ -167,33 +167,33 @@ else:
     if '1' in method:
         rk.rk2_const(methods.fy2, methods.fz2)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'k-v', label = 'y(x) rk2')
-        plt.plot(x, z, 'k-v', label = 'z(x) rk2')
+        plt.plot(x, y, 'k-', label = 'y(x) rk2')
+        # plt.plot(x, z, 'b-', label = 'z(x) rk2')
     if '2' in method:
         rk.rk2_err_control(methods.fy2, methods.fz2)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'b-4', label = 'y(x) rk2 err')
-        plt.plot(x, z, 'b-4', label = 'z(x) rk2 err')
+        plt.plot(x, y, 'b-x', label = 'y(x) rk2 err')
+        plt.plot(x, z, 'b-', label = 'z(x) rk2 err')
     if '3' in method:
         rk.rk3_const(methods.fy2, methods.fz2)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'y-x', label = 'y(x) rk3')
-        plt.plot(x, z, 'y-x', label = 'z(x) rk3')
+        plt.plot(x, y, 'y-', label = 'y(x) rk3')
+        plt.plot(x, z, 'y-', label = 'z(x) rk3')
     if '4' in method:
         rk.rk3_err_control(methods.fy2, methods.fz2)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'g-s', label = 'y(x) rk3 err')
-        plt.plot(x, z, 'g-s', label = 'z(x) rk3 err')
+        plt.plot(x, y, 'g-', label = 'y(x) rk3 err')
+        plt.plot(x, z, 'g-', label = 'z(x) rk3 err')
     if '5' in method:
         rk.rk4_const(methods.fy2, methods.fz2)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'r-3', label = 'y(x) rk4')
-        plt.plot(x, z, 'r-3', label = 'z(x) rk4')
+        plt.plot(x, y, 'r-', label = 'y(x) rk4')
+        plt.plot(x, z, 'r-', label = 'z(x) rk4')
     if '6' in method:
         rk.rk4_err_control(methods.fy2, methods.fz2)
         x, y, z = get_lsts()
-        plt.plot(x, y, 'm-p', label = 'y(x) rk4 err')
-        plt.plot(x, z, 'm-p', label = 'z(x) rk4 err')
+        plt.plot(x, y, 'm-', label = 'y(x) rk4 err')
+        plt.plot(x, z, 'm-', label = 'z(x) rk4 err')
 
 plt.legend(loc='upper left')
 plt.grid()
