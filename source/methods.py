@@ -1,32 +1,10 @@
-import math
 import json
-
-
-# Тестовая задача
-def test_fy(x, y, z):
-    return 0.58 * y
-
-def test_fz(x, y, z):
-    return 0
-
-# 1-ая задача
-def fy1(x, y, z):
-    return y/x - y ** 2
-
-def fz1(x, y, z):
-    return 0
-
-# 2-ая задача
-def fy2(x, y, z):
-    return y * z + math.cos(x) / x
-
-def fz2(x, y, z):
-    return - z ** 2 + 2.5/(1 + x ** 2)
+import cmethods
 
 
 class Rk:
     EPS = 0.00001
-    ITERATION = 5000
+    ITERATION = 10000000
 
     def __init__(self, x0, y0, z0, h, x_fin):
         self._x0 = x0
@@ -86,6 +64,7 @@ class Rk:
         self._z_lst.append(z)
 
     def _local_err_control(self, S_y, S_z, p, x3, y3, z3):
+        # ?
         if self._h < Rk.EPS:
             self._x = x3
             self._y = y3
@@ -93,6 +72,7 @@ class Rk:
             self._push(self._x, self._y, self._z)
             self._min_h = self._h if self._min_h > self._h else self._min_h
             self._h = Rk.EPS
+        # 
         else:    
             if abs(S_y) > Rk.EPS or abs(S_z) > Rk.EPS:
                 self._h *= 0.5
@@ -119,6 +99,7 @@ class Rk:
         n = int((self._x_fin - self._x)/self._h)
 
         for _ in range(1, n + 1):
+            # контроль итерации
             self.ITERATION -= 1
             if self.ITERATION == 0:
                 break
@@ -135,17 +116,9 @@ class Rk:
 
     def _rk2(self, y, z, x, h, fy, fz):
         try:
-            k1_y = fy(x, y, z)
-            k1_z = fz(x, y, z)
-
-            k2_y = fy(x + h, y + k1_y * h, z + k1_z * h)
-            k2_z = fz(x + h, y + k1_y * h, z + k1_z * h)
-
-            res_y = y + 0.5 * h * (k1_y + k2_y)
-            res_z = z + 0.5 * h * (k1_z + k2_z)
+            res_y, res_z = cmethods.c_rk2(y, z, x, h, fy, fz)
         except ZeroDivisionError:
-            res_y, res_z = self._rk2(y, z, self.EPS, h, fy, fz)
-    
+            res_y, res_z = cmethods.c_rk2(y, z, self.EPS*1000, h, fy, fz)
         return res_y, res_z
 
     def rk2_const(self, fy, fz):
@@ -179,20 +152,9 @@ class Rk:
 
     def _rk3(self, y, z, x, h, fy, fz):
         try:
-            k1_y = fy(x, y, z)
-            k1_z = fz(x, y, z)
-
-            k2_y = fy(x + h*0.5, y + k1_y*h*0.5, z + k1_z*h*0.5)
-            k2_z = fz(x + h*0.5, y + k1_y*h*0.5, z + k1_z*h*0.5)
-
-            k3_y = fy(x + h, y - k1_y*h + 2*h*k2_y, z - k1_z*h + 2*h*k2_z)
-            k3_z = fz(x + h, y - k1_y*h + 2*h*k2_y, z - k1_z*h + 2*h*k2_z)
-
-            res_y = y + 1/6 * h * (k1_y + 4 * k2_y + k3_y)
-            res_z = z + 1/6 * h * (k1_z + 4 * k2_z + k3_z)
+            res_y, res_z = cmethods.c_rk3(y, z, x, h, fy, fz)
         except ZeroDivisionError:
-            res_y, res_z = self._rk3(y, z, self.EPS, h, fy, fz)
-
+            res_y, res_z = cmethods.c_rk3(y, z, self.EPS*1000, h, fy, fz)
         return res_y, res_z
 
     def rk3_const(self, fy, fz):
@@ -227,23 +189,9 @@ class Rk:
 
     def _rk4(self, y, z, x, h, fy, fz):
         try:
-            k1_y = fy(x, y, z)
-            k1_z = fz(x, y, z)
-
-            k2_y = fy(x + h*0.5, y + k1_y*h*0.5, z + k1_z*h*0.5)
-            k2_z = fz(x + h*0.5, y + k1_y*h*0.5, z + k1_z*h*0.5)
-
-            k3_y = fy(x + h*0.5, y + 0.5*h*k2_y, z + 0.5*h*k2_z)
-            k3_z = fz(x + h*0.5, y + 0.5*h*k2_y, z + 0.5*h*k2_z)
-
-            k4_y = fy(x + h, y + h*k3_y, z + h*k3_z)
-            k4_z = fz(x + h, y + h*k3_y, z + h*k3_z)
-
-            res_y = y + 1/6 * h * (k1_y + 2 * k2_y + 2 * k3_y + k4_y)
-            res_z = z + 1/6 * h * (k1_z + 2 * k2_z + 2 * k3_z + k4_z)
+            res_y, res_z = cmethods.c_rk4(y, z, x, h, fy, fz)
         except ZeroDivisionError:
-            res_y, res_z = self._rk4(y, z, self.EPS, h, fy, fz)
-
+            res_y, res_z = cmethods.c_rk4(y, z, self.EPS*1000, h, fy, fz)
         return res_y, res_z
 
     def rk4_const(self, fy, fz):
