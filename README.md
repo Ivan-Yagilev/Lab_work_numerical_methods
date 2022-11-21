@@ -17,6 +17,7 @@
         - methods.py - класс, реализующий работу методов Рунге-Кутта
         - functions.py - исходные функции
 
-!Для корректной работы программы!:
-    - Запуск скрипта (pip install -r requirements.txt)
-    - Запуск скрипта (python setup.py build_ext --inplace)
+!Для корректной работы программы запуск скриптов!:
+    - pip install -r requirements.txt
+    - python3 -m venv env
+    - python setup.py build_ext --inplace
