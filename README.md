@@ -18,6 +18,6 @@
         - functions.py - исходные функции
 
     !Для корректной работы программы запуск скриптов!:
-        - pip install -r requirements.txt
         - python3 -m venv env
+        - pip install -r requirements.txt (в активированном виртуальном окружении)
         - python setup.py build_ext --inplace
