@@ -36,6 +36,17 @@ if choice == '0':
     6. Рунге-Кутта 4 порядка с переменным шагом
     ''')
 
+    print(f'''
+    Решение уравнения: 
+        y' = 0.58 * y
+    С начальными условиями:
+        x0 = {x0},
+        y0 = {y0},
+        z0 = {z0},
+        start h = {h},
+        x_fin = {x_fin}
+    ''')
+
     if '1' in method:
         rk.rk2_const(functions.test_fy, functions.test_fz)
         x, y, z = functions.get_lsts()
@@ -91,6 +102,17 @@ elif choice == '1':
     6. Рунге-Кутта 4 порядка с переменным шагом
     ''')
 
+    print(f'''
+    Решение уравнения: 
+        y' = y/x - y ** 2
+    С начальными условиями:
+        x0 = {x0},
+        y0 = {y0},
+        z0 = {z0},
+        start h = {h},
+        x_fin = {x_fin}
+    ''')
+
     if '1' in method:
         rk.rk2_const(functions.fy1, functions.fz1)
         x, y, z = functions.get_lsts()
@@ -125,6 +147,12 @@ else:
     h = d['h']
     x_fin = d['x_fin']
 
+    choice_portreit = input('''
+    Отображать фазовый портрет? [Y/N]
+    ''')
+    if choice_portreit.lower() == 'y':
+        functions.Portreit.draw()
+
     choice_scipy = input('''
     Отображать график точного решения? [Y/N]
     ''')
@@ -146,6 +174,18 @@ else:
     4. Рунге-Кутта 3 порядка с переменным шагом
     5. Рунге-Кутта 4 порядка с постоянным шагом
     6. Рунге-Кутта 4 порядка с переменным шагом
+    ''')
+
+    print(f'''
+    Решение системы уравнений: 
+        y' = y * z + cos(x)/x
+        z' = - z**2 + 2.5/(1 + x**2)
+    С начальными условиями:
+        x0 = {x0},
+        y0 = {y0},
+        z0 = {z0},
+        start h = {h},
+        x_fin = {x_fin}
     ''')
 
     if '1' in method:
@@ -179,6 +219,7 @@ else:
         plt.plot(x, y, 'm-', label = 'y(x) rk4 err')
         plt.plot(x, z, 'm-', label = 'z(x) rk4 err')
 
+plt.suptitle('Численное решение')
 plt.legend(loc='upper left')
 plt.grid()
 plt.show()

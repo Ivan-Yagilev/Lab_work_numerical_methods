@@ -29,7 +29,7 @@ class Rk:
         self._doubl_numb = 0
         self._max_h = self._h
         self._min_h = self._h
-        self._local_err = []
+        self._local_err = [0]
 
     @property
     def lst_y(self):
@@ -226,13 +226,13 @@ class Rk:
         self._out()
 
     def _out(self):
-        b = self._x_fin - self._x_lst[-1]
+        b = abs(self._x_fin - self._x_lst[-1])
         print(f"Разность правой границы и численного решения x = {b if b > Rk.EPS else 0}")
         print(f"Максимальная оценка локальной погрешности = {max(self._local_err)}")
         print(f"Число делений шага = {self._div_numb}")
         print(f"Число удвоений шага = {self._doubl_numb}")
         print(f"Максимальный шаг = {self._max_h}")
-        print(f"Минимальный шаг = {self._min_h}")
+        print(f"Минимальный шаг = {self._min_h}\n")
 
         data = {'lst_x': self.lst_x, 'lst_y': self.lst_y, 'lst_z': self.lst_z, 
         'b': b, 'max_LEE': max(self._local_err), 'max_h': self._max_h, 'min_h': self._min_h, 
